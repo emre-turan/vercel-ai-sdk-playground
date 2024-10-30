@@ -6,12 +6,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
-import { Send } from "lucide-react";
+import { Loader2Icon, Send } from "lucide-react";
 
 export default function Chat() {
-  const { messages, input, handleInputChange, handleSubmit } = useChat({
-    maxSteps: 5,
-  });
+  const { messages, input, handleInputChange, handleSubmit, isLoading } =
+    useChat({
+      maxSteps: 5,
+    });
 
   return (
     <div className="p-4 h-[100vh] flex items-center justify-center">
@@ -57,10 +58,24 @@ export default function Chat() {
               placeholder="Type your message..."
               onChange={handleInputChange}
               className="flex-1"
+              disabled={isLoading}
             />
-            <Button type="submit" size="icon">
-              <Send className="size-4" />
-              <span className="sr-only">Send message</span>
+            <Button
+              type={isLoading ? "button" : "submit"}
+              size="icon"
+              onClick={isLoading ? () => stop() : undefined}
+            >
+              {isLoading ? (
+                <>
+                  <Loader2Icon className="size-4 animate-spin" />
+                  <span className="sr-only">Stop generating</span>
+                </>
+              ) : (
+                <>
+                  <Send className="size-4" />
+                  <span className="sr-only">Send message</span>
+                </>
+              )}
             </Button>
           </form>
         </CardContent>
