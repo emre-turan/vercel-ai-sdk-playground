@@ -5,22 +5,49 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { cn } from "@/lib/utils";
-import { Loader2Icon, Send } from "lucide-react";
+import { AlertCircle, Loader2, RefreshCcw, Send } from "lucide-react";
 
 export default function Chat() {
-  const { messages, input, handleInputChange, handleSubmit, isLoading } =
-    useChat({
-      maxSteps: 5,
-    });
+  const {
+    messages,
+    input,
+    handleInputChange,
+    handleSubmit,
+    isLoading,
+    stop,
+    error,
+    reload,
+  } = useChat({
+    maxSteps: 5,
+    keepLastMessageOnError: true,
+  });
 
   return (
     <div className="p-4 h-[100vh] flex items-center justify-center">
-      <Card className="w-full max-w-3xl h-[90vh] flex flex-col">
+      <Card className="w-full max-w-2xl h-[80vh] flex flex-col">
         <CardHeader className="flex-none">
           <CardTitle>Chat with AI</CardTitle>
         </CardHeader>
         <CardContent className="flex-1 flex flex-col gap-4 p-4 h-full overflow-hidden">
+          {error && (
+            <Alert variant="destructive" className="mb-4">
+              <AlertCircle className="size-4" />
+              <AlertDescription className="flex items-center gap-4">
+                An error occurred.
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => reload()}
+                  className="ml-auto"
+                >
+                  <RefreshCcw className="size-4 mr-2" />
+                  Retry
+                </Button>
+              </AlertDescription>
+            </Alert>
+          )}
           <ScrollArea className="flex-1 w-full h-[calc(100%-80px)]">
             <div className="space-y-4 pr-4">
               {messages.map((message) => (
@@ -58,16 +85,17 @@ export default function Chat() {
               placeholder="Type your message..."
               onChange={handleInputChange}
               className="flex-1"
-              disabled={isLoading}
+              disabled={error != null || isLoading}
             />
             <Button
               type={isLoading ? "button" : "submit"}
               size="icon"
               onClick={isLoading ? () => stop() : undefined}
+              disabled={(!input.trim() && !isLoading) || error != null}
             >
               {isLoading ? (
                 <>
-                  <Loader2Icon className="size-4 animate-spin" />
+                  <Loader2 className="size-4 animate-spin" />
                   <span className="sr-only">Stop generating</span>
                 </>
               ) : (
