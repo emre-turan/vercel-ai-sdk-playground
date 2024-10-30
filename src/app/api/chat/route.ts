@@ -10,6 +10,8 @@ export async function POST(req: Request) {
 
   const result = await streamText({
     model: openai("gpt-4o-mini-2024-07-18"),
+    system:
+      "You are a helpful assistant that can answer questions and provide information.Always greet the user as 'Emre.'  ",
     messages,
     tools: {
       weather: tool({

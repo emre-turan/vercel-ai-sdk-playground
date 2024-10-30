@@ -17,7 +17,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={cn("antialiased bg-black", GeistMono.className)}>{children}</body>
+      <body className={cn("antialiased", GeistMono.className)}>{children}</body>
     </html>
   );
 }
