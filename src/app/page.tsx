@@ -25,10 +25,10 @@ export default function Chat() {
   });
 
   return (
-    <div className="p-4 h-[100vh] flex items-center justify-center">
-      <Card className="w-full max-w-2xl h-[80vh] flex flex-col">
-        <CardHeader className="flex-none">
-          <CardTitle>Chat with AI</CardTitle>
+    <div className="p-4 min-h-screen flex items-center justify-center">
+      <Card className="w-full max-w-2xl h-[80vh] flex flex-col shadow-2xl">
+        <CardHeader className="flex-none border-b shadow-sm bg-muted">
+          <CardTitle>Chat with AI- Vercel AI SDK Playground</CardTitle>
         </CardHeader>
         <CardContent className="flex-1 flex flex-col gap-4 p-4 h-full overflow-hidden">
           {error && (
